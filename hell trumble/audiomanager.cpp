@@ -23,7 +23,6 @@ bool AudioManager::LoadMusic(const char* filename, std::string name){
 }
 
 Mix_Chunk* AudioManager::GetEffect(std::string name) {
-
     Mix_Chunk* effect = Effects[name];      
     return effect;
 }

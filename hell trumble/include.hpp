@@ -1,6 +1,6 @@
 #pragma once
 /*********************
-				C++ Libs
+		C++ Libs
 **********************/
 #include <iostream>
 #include <string>
@@ -8,11 +8,12 @@
 #include <vector>
 #include <iterator>
 /*********************
-				C Libs
+		C Libs
 **********************/
 #include <direct.h>
 /*********************
-				Macros
+		Macros
 **********************/
+#include <SDL.h>
 
 

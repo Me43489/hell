@@ -1,5 +1,5 @@
 /*****************************
-						Main
+			Main
 ******************************/
 #include "include.hpp"
 #include "game.hpp"
@@ -14,8 +14,6 @@ int main(int argc, char** argv) {
 	std::cout << "working dir : " << buffer << std::endl;
 	printf("C++ Version: %ld", __cplusplus);
 #endif // JJJ_DEBUG
-
-
 
 	Game app = Game("Hell Project", 1280, 1024);
 	app.run();

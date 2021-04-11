@@ -26,7 +26,8 @@ public:
 	static void DrawTexture(SDL_Texture* texture);
 	static void DrawTexture(SDL_Texture* texture, const SDL_Rect targetRect);
 	static void DrawTexture(SDL_Texture* texture, const SDL_Rect targetRect, const SDL_Rect subTexture);
-
+	static void DrawTextureRot(SDL_Texture* texture, const SDL_Rect targetRect, const SDL_Rect subTexture, float angle);
+	
 	static inline SDL_Window* GetWindow() { return displayInstance->window; }
 	static inline SDL_Renderer* GetRenderer() { return displayInstance->renderer; }
 };

@@ -39,7 +39,7 @@ void Display::DrawTexture(SDL_Texture* texture)
 	SDL_RenderCopy(GetRenderer(), texture, NULL, NULL);
 }
 
-void Display::DrawTexture(SDL_Texture* texture, const SDL_Rect targetRect)
+void Display::DrawTexture(SDL_Texture* texture, SDL_Rect targetRect)
 {
 	SDL_RenderCopy(GetRenderer(), texture, NULL, &targetRect);
 }
@@ -48,6 +48,13 @@ void Display::DrawTexture(SDL_Texture* texture, const SDL_Rect targetRect, const
 {
 	SDL_RenderCopy(GetRenderer(), texture, &targetRect, &subTexture);
 }
+
+void Display::DrawTextureRot(SDL_Texture* texture, const SDL_Rect targetRect, const SDL_Rect subTexture, float angle){
+	SDL_Point point = { targetRect.x + (targetRect.w / 2),targetRect.y + (targetRect.h / 2) };
+	SDL_RenderCopyEx(GetRenderer(), texture, &targetRect, &subTexture, angle, &point,SDL_FLIP_NONE);
+}
+
+//void Display::DrawTexture()
 /************************************
 			statics
 ***********************************/

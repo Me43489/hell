@@ -116,6 +116,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -139,26 +141,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="audioplayer.cpp" />
     <ClCompile Include="audioplayer.hpp" />
-    <ClCompile Include="board.cpp" />
     <ClCompile Include="display.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="audiomanager.cpp" />
-    <ClCompile Include="space.cpp" />
     <ClCompile Include="texturemanager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="board.hpp" />
-    <ClInclude Include="chip.hpp" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="display.hpp" />
+    <ClInclude Include="font16.hpp" />
     <ClInclude Include="game.hpp" />
     <ClInclude Include="include.hpp" />
     <ClInclude Include="audiomanager.hpp" />
-    <ClInclude Include="space.hpp" />
     <ClInclude Include="textureconst.hpp" />
     <ClInclude Include="texturemanager.hpp" />
+    <ClInclude Include="timer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

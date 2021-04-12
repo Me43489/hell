@@ -53,6 +53,7 @@ Game::Game(std::string title, int w, int h) :event() {
     onStop = std::bind(&Game::WheelStopped,this);
     running = true;
     paused = false;
+    found = false;
 }
 
 void Game::render() {
@@ -104,44 +105,67 @@ void Game::render() {
     Display::DrawTexture(backround,BackRoundRect);
     //Display::DrawTexture(TextureManager::Images["wheel"],wheel);
     angle += angleoffset + avgFPS;
-    // angle += framerate;
-    float radians = angle * M_PI / 180;
-    Display::DrawTextureRot(TextureManager::Images["wheel"],srcwheel,wheel,angle);
-    SDL_SetRenderDrawColor(Display::GetRenderer(), 0, 255, 0, SDL_ALPHA_OPAQUE);
-    SDL_RenderDrawRect(Display::GetRenderer(), &test);
-   
-    int CurrentState = (int)(angle / 40);
-    int i = 0;
+    if (!found) {
+        // angle += framerate;
+        float radians = angle * M_PI / 180;
+        Display::DrawTextureRot(TextureManager::Images["wheel"], srcwheel, wheel, angle);
+        SDL_SetRenderDrawColor(Display::GetRenderer(), 0, 255, 0, SDL_ALPHA_OPAQUE);
+        SDL_RenderDrawRect(Display::GetRenderer(), &test);
 
-    if (CurrentState != PreviousWheelPos) {
-        Mix_PlayChannel(-1, AudioManager::Effects["pop"], 0);
-        std::cerr << "sound played\n";
-        PreviousWheelPos = CurrentState;
-    } 
-    //draws the dots on the circle
-    for (int i = 0; i < 9; i++) {
-        int ANGLE = 40 * i;
-        int px = cx + std::sin(ANGLE * M_PI / 180) * radius;
-        int py = cy - std::cos(ANGLE * M_PI / 180) * radius;
-       // SDL_Rect test2 = { px,py,10,10 };
-        
-        //SDL_SetRenderDrawColor(Display::GetRenderer(), 0, 255, 255, SDL_ALPHA_OPAQUE);
-       // SDL_RenderDrawRect(Display::GetRenderer(), &test2);
-       // SDL_RenderFillRect(Display::GetRenderer(), &test2);
-        WheelCords[i].x = px;
-        WheelCords[i].y = py;
+        int CurrentState = (int)(angle / 40);
+        int i = 0;
+
+        if (CurrentState != PreviousWheelPos) {
+            Mix_PlayChannel(-1, AudioManager::Effects["pop"], 0);
+            //std::cerr << "sound played\n";
+            PreviousWheelPos = CurrentState;
+        }
+        //draws the dots on the circle
+        for (int i = 0; i < 9; i++) {
+            int ANGLE = 40 * i;
+            int px = cx + std::sin(ANGLE * M_PI / 180) * radius;
+            int py = cy - std::cos(ANGLE * M_PI / 180) * radius;
+            // SDL_Rect test2 = { px,py,10,10 };
+
+             //SDL_SetRenderDrawColor(Display::GetRenderer(), 0, 255, 255, SDL_ALPHA_OPAQUE);
+            // SDL_RenderDrawRect(Display::GetRenderer(), &test2);
+            // SDL_RenderFillRect(Display::GetRenderer(), &test2);
+            WheelCords[i].x = px;
+            WheelCords[i].y = py;
+        }
+
+        int delta = SDL_GetTicks() - starttick;     //actual time b/w frames
+
+        int avgFPS = 60 / (desiredDelta - delta);  //calculating FPS HERE
+
+        if (delta < desiredDelta) {
+            SDL_Delay(desiredDelta - delta);
+        }
     }
- 
-    int delta = SDL_GetTicks() - starttick;     //actual time b/w frames
-    
-    int avgFPS = 60 / (desiredDelta - delta);  //calculating FPS HERE
-
-    if (delta < desiredDelta){
-        SDL_Delay(desiredDelta - delta);
+    else {
+        switch (sinner) {
+        case 0:
+            std::cout << "Treachery\n";
+            break;
+        case 1:
+            std::cout << "Fraud\n";
+            break;
+        case 2:
+            std::cout << "violence\n";
+            break;
+        case 3:
+            std::cout << "hearsay\n";
+            break;
+        }
     }
-
-   Display::Present();
-   
+    int hiangle = (int)angle;
+    hiangle %= 360;
+    int pos = hiangle / (360 / 9);
+    //std::cout << pos << "\n";
+      Display::Present();
+   if(angle > 360.00){
+       angle -= 360.00;
+   }
    
    if (angleoffset != 0.0) {
        angleoffset *= .999;
@@ -160,8 +184,9 @@ void Game::update() {
             quit();
         }
         if (event.type == SDL_MOUSEBUTTONDOWN) {
+            found = false;
             do {
-               float x = (float) (10 + rand() % 100) / 20.0;
+                float x = (float) (10 + rand() % 100) / 20.0;
                angleoffset = x;
                 if (event.key.keysym.scancode == SDL_SCANCODE_KP_ENTER) {
                     used = false;
@@ -182,16 +207,23 @@ void Game::update() {
             //AudioPlayer::PlaySound(AudioManager::Effects["bells"]);
             Mix_PlayChannel(-1, AudioManager::Effects["bells"], 0);
             break;
-        case SDL_SCANCODE_PAUSE:
-            do{
+        case SDL_SCANCODE_UP:
+            angle += 2.0;
+            int hiangle = (int)angle;
+            hiangle %= 360;
+            int pos = hiangle / (360 / 9);
+            //std::cout << pos << "\n";
+            break;
+        //case SDL_SCANCODE_PAUSE:
+        /*    do{
                 SDL_PollEvent(&event);
                 paused = true;
                 avgFPS = 0;
                 if (event.key.keysym.scancode == SDL_SCANCODE_KP_ENTER) {
                     paused = false;
                 }
-            }while(paused);
-            break;
+            }while(paused);*/
+           // break;
         }
 
     }
@@ -207,20 +239,21 @@ void Game::run() {
     }   
 }
 void Game::WheelStopped() {
+    found = true;
     Mix_PlayChannel(-1, AudioManager::Effects["cool"], 0);
     Mix_PlayChannel(-1, AudioManager::Effects["bell"], 0);
-    SDL_Delay(4000);
+    SDL_Delay(2000);
     Mix_PlayChannel(-1, AudioManager::Effects["cool"], 0);
     Mix_PlayChannel(-1, AudioManager::Effects["bell"], 0);
-    SDL_Delay(4000);
+    SDL_Delay(2000);
     Mix_PlayChannel(-1, AudioManager::Effects["cool"], 0);
     Mix_PlayChannel(-1, AudioManager::Effects["bell"], 0);
     
-    
-    
-       
-
-
+    int hiangle = (int)angle;
+    hiangle %= 360;
+    int pos = hiangle / (360 / 9);
+    //std::cout << pos << "\n";
+    sinner = pos;
 }
 
 void Game::quit() {

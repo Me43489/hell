@@ -18,9 +18,12 @@ private:
 	SDL_Event event;
 	SDL_Texture* backround;
 	bool paused;
+	bool found;
+
 
 	float angle = 0.0;
 	int  PreviousWheelPos = 0;
+	int sinner;
 	void update();
 	void render();
 	void WheelStopped();
